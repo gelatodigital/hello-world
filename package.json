@@ -1,0 +1,63 @@
+{
+  "name": "gelato-aave",
+  "version": "0.0.1",
+  "description": "Gelato Aave contracts and tests",
+  "scripts": {
+    "build": "yarn compile --force && npx tsc",
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat deploy",
+    "format": "prettier --write '*/**/*.*{js,sol,json,md,ts}'",
+    "format:check": "prettier --check '*/**/*.*{js,sol,json,md,ts}'",
+    "lint": "eslint --cache . && yarn lint:sol",
+    "lint:ts": "eslint -c .eslintrc.json --ext \"**/*.ts\" \"**/*.test.ts\"",
+    "lint:sol": "solhint 'contracts/**/*.sol'",
+    "postinstall": "yarn husky install",
+    "test": "npx hardhat test",
+    "verify": "npx hardhat etherscan-verify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gelatodigital/gelato-aave.git"
+  },
+  "author": "gauddel & gitpusha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gelatodigital/gelato-aave/issues"
+  },
+  "homepage": "https://github.com/gelatodigital/gelato-aave#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
+    "@nomiclabs/hardhat-waffle": "2.0.1",
+    "@tsconfig/recommended": "1.0.1",
+    "@typechain/ethers-v5": "7.0.1",
+    "@typechain/hardhat": "2.2.0",
+    "@types/chai": "4.2.21",
+    "@types/mocha": "9.0.0",
+    "@types/node": "16.4.7",
+    "@typescript-eslint/eslint-plugin": "4.28.5",
+    "@typescript-eslint/parser": "4.28.5",
+    "chai": "4.3.4",
+    "dotenv": "10.0.0",
+    "eslint": "7.31.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "ethereum-waffle": "3.4.0",
+    "ethers": "5.4.2",
+    "hardhat": "2.5.0",
+    "hardhat-deploy": "0.8.11",
+    "husky": "7.0.1",
+    "lint-staged": "11.1.1",
+    "prettier": "2.3.2",
+    "prettier-plugin-solidity": "1.0.0-beta.17",
+    "solhint": "3.3.6",
+    "solhint-plugin-prettier": "0.0.5",
+    "ts-generator": "0.1.1",
+    "ts-node": "10.1.0",
+    "typechain": "5.1.2",
+    "typescript": "4.3.5"
+  },
+  "lint-staged": {
+    "*.*{js,sol,json,md,ts,yml,yaml}": "prettier --write",
+    "*.*{ts,js}": "eslint -c .eslintrc.json"
+  }
+}
