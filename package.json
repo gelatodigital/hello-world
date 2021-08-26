@@ -1,7 +1,7 @@
 {
-  "name": "gelato-aave",
+  "name": "gelato-helloworld",
   "version": "0.0.1",
-  "description": "Gelato Aave contracts and tests",
+  "description": "Gelato hello world contracts and tests",
   "scripts": {
     "build": "yarn compile --force && npx tsc",
     "compile": "npx hardhat compile",
@@ -17,14 +17,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gelatodigital/gelato-aave.git"
+    "url": "git+https://github.com/gelatodigital/hello-world.git"
   },
   "author": "gauddel & gitpusha",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gelatodigital/gelato-aave/issues"
-  },
-  "homepage": "https://github.com/gelatodigital/gelato-aave#readme",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
     "@nomiclabs/hardhat-waffle": "2.0.1",
@@ -42,11 +38,12 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "3.4.1",
     "ethereum-waffle": "3.4.0",
-    "ethers": "5.4.5",
-    "hardhat": "2.6.1",
-    "hardhat-deploy": "0.9.0",
-    "husky": "7.0.2",
-    "lint-staged": "11.1.2",
+    "ethers": "^5.4.5",
+    "hardhat": "2.5.0",
+    "hardhat-deploy": "0.8.11",
+    "hardhat-deploy-ethers": "^0.3.0-beta.10",
+    "husky": "7.0.1",
+    "lint-staged": "11.1.1",
     "prettier": "2.3.2",
     "prettier-plugin-solidity": "1.0.0-beta.17",
     "solhint": "3.3.6",
@@ -59,5 +56,8 @@
   "lint-staged": {
     "*.*{js,sol,json,md,ts,yml,yaml}": "prettier --write",
     "*.*{ts,js}": "eslint -c .eslintrc.json"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.0"
   }
 }

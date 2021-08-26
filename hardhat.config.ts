@@ -25,6 +25,13 @@ const config: HardhatUserConfig = {
   },
 
   networks: {
+    hardhat: {
+      forking: {
+        url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_ID}`,
+        blockNumber: 10911528,
+      },
+    },
+
     ropsten: {
       accounts: PK ? [PK] : [],
       chainId: 3,
