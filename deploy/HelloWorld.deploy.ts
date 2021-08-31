@@ -1,4 +1,4 @@
-import { deployments, getNamedAccounts, ethers } from "hardhat";
+import { deployments, getNamedAccounts } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { getAddressBookByNetwork } from "../src/config";
 import { DeployFunction } from "hardhat-deploy/types";
@@ -28,9 +28,8 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     console.error("No gelato in network config addressBook");
     return;
   }
-  let gelatoSigner = ethers.provider.getSigner(gelato);
 
-  const helloWorld = await deploy("HelloWorld", {
+  await deploy("HelloWorld", {
     from: deployer,
     args: [gelato],
     log: hre.network.name !== "hardhat" ? true : false,
@@ -49,4 +48,4 @@ func.skip = async (hre: HardhatRuntimeEnvironment) => {
   return shouldSkip ? true : false;
 };
 
-func.tags = [];
+func.tags = ["HelloWorld"];
