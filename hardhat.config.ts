@@ -6,6 +6,9 @@ import "@nomiclabs/hardhat-ethers";
 import "@typechain/hardhat";
 import "hardhat-deploy";
 
+// Tasks
+import "./hardhat/tasks";
+
 // Process Env Variables
 import * as dotenv from "dotenv";
 dotenv.config({ path: __dirname + "/.env" });
@@ -36,7 +39,6 @@ const config: HardhatUserConfig = {
       accounts: PK ? [PK] : [],
       chainId: 3,
       url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_ID}`,
-      gasPrice: 10000000000, // 10 Gwei
     },
   },
 
