@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Gelato hello world contracts and tests",
   "scripts": {
-    "build": "yarn compile --force && npx tsc",
-    "compile": "npx hardhat compile",
+    "build": "yarn compile && npx tsc",
+    "compile": "npx hardhat compile --force",
     "deploy": "npx hardhat deploy",
     "format": "prettier --write '*/**/*.*{js,sol,json,md,ts}'",
     "format:check": "prettier --check '*/**/*.*{js,sol,json,md,ts}'",
