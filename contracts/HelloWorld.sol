@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: UNLICENSE
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.7;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
@@ -12,6 +12,9 @@ contract HelloWorld is Ownable, Gelatofied {
 
     // solhint-disable-next-line no-empty-blocks
     constructor(address payable _gelato) Gelatofied(_gelato) {}
+
+    // solhint-disable-next-line no-empty-blocks
+    receive() external payable {}
 
     function setInterval(uint256 _interval) external onlyOwner {
         interval = _interval;
