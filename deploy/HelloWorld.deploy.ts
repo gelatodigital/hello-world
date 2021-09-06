@@ -10,7 +10,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     console.log(
       `Deploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
     );
-    await sleep(10000);
+    await sleep(100);
   }
 
   const { deploy } = deployments;
@@ -25,7 +25,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
   await deploy("HelloWorld", {
     from: deployer,
-    proxy: true,
+    proxy: "EIP173ProxyWithReceive",
     args: [gelato],
     gasPrice: hre.ethers.utils.parseUnits("100", "gwei"),
     log: hre.network.name !== "hardhat" ? true : false,
@@ -34,9 +34,9 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
 export default func;
 
-func.skip = async (hre: HardhatRuntimeEnvironment) => {
-  const shouldSkip = hre.network.name === "ropsten";
-  return shouldSkip ? true : false;
-};
+// func.skip = async (hre: HardhatRuntimeEnvironment) => {
+//   const shouldSkip = hre.network.name === "ropsten";
+//   return shouldSkip ? true : false;
+// };
 
 func.tags = ["HelloWorld"];

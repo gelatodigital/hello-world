@@ -7,7 +7,7 @@ import "@typechain/hardhat";
 import "hardhat-deploy";
 
 // Tasks
-import "./hardhat/tasks";
+//import "./hardhat/tasks";
 
 // Process Env Variables
 import * as dotenv from "dotenv";
