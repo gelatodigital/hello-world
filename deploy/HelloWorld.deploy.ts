@@ -10,7 +10,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     console.log(
       `Deploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
     );
-    await sleep(100);
+    await sleep(10000);
   }
 
   const { deploy } = deployments;
@@ -36,9 +36,9 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
 export default func;
 
-// func.skip = async (hre: HardhatRuntimeEnvironment) => {
-//   const shouldSkip = hre.network.name === "ropsten";
-//   return shouldSkip ? true : false;
-// };
+func.skip = async (hre: HardhatRuntimeEnvironment) => {
+  const shouldSkip = hre.network.name === "ropsten";
+  return shouldSkip ? true : false;
+};
 
 func.tags = ["HelloWorld"];
