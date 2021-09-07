@@ -25,7 +25,9 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
   await deploy("HelloWorld", {
     from: deployer,
-    proxy: "EIP173ProxyWithReceive",
+    proxy: {
+      proxyContract: "EIP173ProxyWithReceive",
+    },
     args: [gelato],
     gasPrice: hre.ethers.utils.parseUnits("100", "gwei"),
     log: hre.network.name !== "hardhat" ? true : false,
