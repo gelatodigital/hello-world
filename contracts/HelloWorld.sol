@@ -1,10 +1,10 @@
-//SPDX-License-Identifier: UNLICENSE
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Proxied} from "./vendor/hardhat-deploy/Proxied.sol";
 import {Gelatofied} from "./gelato/Gelatofied.sol";
 
-contract HelloWorld is Ownable, Gelatofied {
+contract HelloWorld is Proxied, Gelatofied {
     uint256 public interval;
     uint256 public lastCallTime;
 
@@ -13,7 +13,7 @@ contract HelloWorld is Ownable, Gelatofied {
     // solhint-disable-next-line no-empty-blocks
     constructor(address payable _gelato) Gelatofied(_gelato) {}
 
-    function setInterval(uint256 _interval) external onlyOwner {
+    function setInterval(uint256 _interval) external onlyProxyAdmin {
         interval = _interval;
     }
 

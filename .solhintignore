@@ -2,4 +2,3 @@ node_modules/
 contracts/functions
 contracts/vendor
 contracts/interfaces
-contracts/lib/aave
