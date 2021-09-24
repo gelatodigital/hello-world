@@ -37,6 +37,18 @@ const config: HardhatUserConfig = {
       chainId: 3,
       url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_ID}`,
     },
+
+    matic: {
+      accounts: PK ? [PK] : [],
+      chainId: 137,
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_ID}`,
+    },
+
+    fantom: {
+      accounts: PK ? [PK] : [],
+      chainId: 250,
+      url: "https://rpcapi.fantom.network/",
+    },
   },
 
   etherscan: {
