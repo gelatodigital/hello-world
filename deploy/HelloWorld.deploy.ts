@@ -37,7 +37,11 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 export default func;
 
 func.skip = async (hre: HardhatRuntimeEnvironment) => {
-  const shouldSkip = hre.network.name === "ropsten";
+  const shouldSkip =
+    hre.network.name === "ropsten" ||
+    hre.network.name === "matic" ||
+    hre.network.name === "fantom";
+
   return shouldSkip ? true : false;
 };
 
