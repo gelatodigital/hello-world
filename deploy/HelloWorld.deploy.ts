@@ -6,7 +6,11 @@ import { sleep } from "../src/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  if (hre.network.name === "ropsten") {
+  if (
+    hre.network.name === "ropsten" ||
+    hre.network.name === "matic" ||
+    hre.network.name === "fantom"
+  ) {
     console.log(
       `Deploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
     );
