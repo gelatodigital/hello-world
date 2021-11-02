@@ -49,6 +49,12 @@ const config: HardhatUserConfig = {
       chainId: 250,
       url: "https://rpcapi.fantom.network/",
     },
+
+    bsc: {
+      accounts: PK ? [PK] : [],
+      url: "https://bsc-dataseed.binance.org/",
+      chainId: 56,
+    },
   },
 
   etherscan: {

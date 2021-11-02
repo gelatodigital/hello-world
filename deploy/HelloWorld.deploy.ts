@@ -7,8 +7,11 @@ import { sleep } from "../src/utils";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   if (
+    hre.network.name === "mainnet" ||
+    hre.network.name === "rinkeby" ||
     hre.network.name === "ropsten" ||
     hre.network.name === "matic" ||
+    hre.network.name === "bsc" ||
     hre.network.name === "fantom"
   ) {
     console.log(
@@ -42,8 +45,11 @@ export default func;
 
 func.skip = async (hre: HardhatRuntimeEnvironment) => {
   const shouldSkip =
+    hre.network.name === "mainnet" ||
+    hre.network.name === "rinkeby" ||
     hre.network.name === "ropsten" ||
     hre.network.name === "matic" ||
+    hre.network.name === "bsc" ||
     hre.network.name === "fantom";
 
   return shouldSkip ? true : false;

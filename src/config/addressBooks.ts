@@ -42,6 +42,11 @@ export const getAddressBookByNetwork = (network: string) => {
         WETH: "0xc778417e063141139fce010982780140aa0cd5ab",
       };
 
+    case "bsc":
+      return {
+        gelato: "0x7C5c4Af1618220C090A6863175de47afb20fa9Df",
+      };
+
     default: {
       throw new Error(`addressBooks: network: ${network} not supported`);
     }
