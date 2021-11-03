@@ -49,11 +49,20 @@ const config: HardhatUserConfig = {
       chainId: 250,
       url: "https://rpcapi.fantom.network/",
     },
-
     bsc: {
       accounts: PK ? [PK] : [],
       url: "https://bsc-dataseed.binance.org/",
       chainId: 56,
+    },
+    arbitrum: {
+      url: "https://arb1.arbitrum.io/rpc",
+      chainId: 42161,
+      accounts: PK ? [PK] : [],
+    },
+    avalanche: {
+      url: "https://api.avax.network/ext/bc/C/rpc",
+      chainId: 43114,
+      accounts: PK ? [PK] : [],
     },
   },
 
