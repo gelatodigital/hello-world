@@ -87,6 +87,12 @@ const config: HardhatUserConfig = {
       url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_ID}`,
     },
 
+    goerli: {
+      accounts: PK ? [PK] : [],
+      chainId: 5,
+      url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_ID}`,
+    },
+
     matic: {
       accounts: PK ? [PK] : [],
       chainId: 137,
