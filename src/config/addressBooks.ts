@@ -42,6 +42,15 @@ export const getAddressBookByNetwork = (network: string) => {
         WETH: "0xc778417e063141139fce010982780140aa0cd5ab",
       };
 
+    case "goerli":
+      return {
+        gelato: "0x683913B3A32ada4F8100458A3E1675425BdAa7DF",
+        uniswapV2Factory: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+        uniswapV2Router02: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
+        ETH: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        WETH: "",
+      };
+
     default: {
       throw new Error(`addressBooks: network: ${network} not supported`);
     }
