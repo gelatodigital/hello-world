@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "Gelato hello world contracts and tests",
   "scripts": {
-    "build": "yarn compile && npx tsc",
+    "build": "yarn clean && yarn compile && npx tsc",
     "compile": "npx hardhat compile --force",
+    "clean": "rm -rf dist",
     "deploy": "npx hardhat deploy",
     "format": "prettier --write '*/**/*.*{js,sol,json,md,ts}'",
     "format:check": "prettier --check '*/**/*.*{js,sol,json,md,ts}'",
@@ -22,12 +23,12 @@
   "license": "ISC",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
-    "@nomiclabs/hardhat-waffle": "2.0.1",
-    "@openzeppelin/contracts": "4.3.1",
+    "@nomiclabs/hardhat-waffle": "2.0.3",
+    "@openzeppelin/contracts": "4.6.0",
     "@tsconfig/recommended": "1.0.1",
-    "@typechain/ethers-v5": "7.0.1",
-    "@typechain/hardhat": "3.0.0",
-    "@types/chai": "4.2.21",
+    "@typechain/ethers-v5": "10.0.0",
+    "@typechain/hardhat": "6.0.0",
+    "@types/chai": "4.3.1",
     "@types/mocha": "9.0.0",
     "@types/node": "16.7.10",
     "@typescript-eslint/eslint-plugin": "4.30.0",
@@ -49,7 +50,7 @@
     "solhint-plugin-prettier": "0.0.5",
     "ts-generator": "0.1.1",
     "ts-node": "10.2.1",
-    "typechain": "5.1.2",
+    "typechain": "8.0.0",
     "typescript": "4.4.2"
   },
   "lint-staged": {

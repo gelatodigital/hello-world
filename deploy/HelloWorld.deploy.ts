@@ -6,15 +6,7 @@ import { sleep } from "../src/utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  if (
-    hre.network.name === "mainnet" ||
-    hre.network.name === "rinkeby" ||
-    hre.network.name === "ropsten" ||
-    hre.network.name === "matic" ||
-    hre.network.name === "bsc" ||
-    hre.network.name === "fantom" ||
-    hre.network.name === "goerli"
-  ) {
+  if (hre.network.name !== "hardhat") {
     console.log(
       `Deploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
     );
@@ -37,7 +29,6 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
       proxyContract: "EIP173ProxyWithReceive",
     },
     args: [gelato],
-    gasPrice: hre.ethers.utils.parseUnits("100", "gwei"),
     log: hre.network.name !== "hardhat" ? true : false,
   });
 };
@@ -45,16 +36,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 export default func;
 
 func.skip = async (hre: HardhatRuntimeEnvironment) => {
-  const shouldSkip =
-    hre.network.name === "mainnet" ||
-    hre.network.name === "rinkeby" ||
-    hre.network.name === "ropsten" ||
-    hre.network.name === "matic" ||
-    hre.network.name === "bsc" ||
-    hre.network.name === "fantom" ||
-    hre.network.name === "goerli";
-
-  return shouldSkip ? true : false;
+  return hre.network.name !== "hardhat";
 };
 
 func.tags = ["HelloWorld"];

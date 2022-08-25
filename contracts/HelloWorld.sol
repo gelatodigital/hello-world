@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.7;
+pragma solidity 0.8.13;
 
 import {Proxied} from "./vendor/hardhat-deploy/Proxied.sol";
 import {Gelatofied} from "./gelato/Gelatofied.sol";
