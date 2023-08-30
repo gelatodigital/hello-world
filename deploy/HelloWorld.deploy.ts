@@ -1,35 +1,20 @@
-import { deployments, getNamedAccounts } from "hardhat";
+import hre, { deployments, getNamedAccounts } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { getAddressBookByNetwork } from "../src/config";
 import { DeployFunction } from "hardhat-deploy/types";
 import { sleep } from "../src/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isHardhat = hre.network.name === "hardhat";
+
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  if (
-    hre.network.name === "mainnet" ||
-    hre.network.name === "rinkeby" ||
-    hre.network.name === "ropsten" ||
-    hre.network.name === "matic" ||
-    hre.network.name === "bsc" ||
-    hre.network.name === "fantom" ||
-    hre.network.name === "goerli"
-  ) {
+  if (!isHardhat) {
     console.log(
-      `Deploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
+      `\nDeploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
     );
-    await sleep(10000);
+    await sleep(2000);
   }
 
   const { deploy } = deployments;
-  const { deployer } = await getNamedAccounts();
-
-  const { gelato } = getAddressBookByNetwork(hre.network.name);
-
-  if (!hre.ethers.utils.isAddress(gelato)) {
-    console.error("No gelato in network config addressBook");
-    return;
-  }
+  const { deployer, gelato } = await getNamedAccounts();
 
   await deploy("HelloWorld", {
     from: deployer,
@@ -37,24 +22,14 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
       proxyContract: "EIP173ProxyWithReceive",
     },
     args: [gelato],
-    gasPrice: hre.ethers.utils.parseUnits("100", "gwei"),
-    log: hre.network.name !== "hardhat" ? true : false,
+    log: !isHardhat,
   });
 };
 
 export default func;
 
-func.skip = async (hre: HardhatRuntimeEnvironment) => {
-  const shouldSkip =
-    hre.network.name === "mainnet" ||
-    hre.network.name === "rinkeby" ||
-    hre.network.name === "ropsten" ||
-    hre.network.name === "matic" ||
-    hre.network.name === "bsc" ||
-    hre.network.name === "fantom" ||
-    hre.network.name === "goerli";
-
-  return shouldSkip ? true : false;
-};
+// func.skip = async () => {
+//   return !isHardhat;
+// };
 
 func.tags = ["HelloWorld"];

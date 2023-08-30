@@ -1,28 +1,42 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.7;
+pragma solidity 0.8.21;
 
 import {Proxied} from "./vendor/hardhat-deploy/Proxied.sol";
-import {Gelatofied} from "./gelato/Gelatofied.sol";
+import {
+    AddressUpgradeable
+} from "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
-contract HelloWorld is Proxied, Gelatofied {
+contract HelloWorld is Proxied {
+    // Best practice to always use Upgradeable pkg for Proxies
+    using AddressUpgradeable for address payable;
+
+    address public immutable gelato;
+
     uint256 public interval;
     uint256 public lastCallTime;
 
     event LogHelloWorld();
 
-    // solhint-disable-next-line no-empty-blocks
-    constructor(address payable _gelato) Gelatofied(_gelato) {}
+    modifier onlyGelato() {
+        require(msg.sender == gelato, "HelloWorld::onlyGelato");
+        _;
+    }
+
+    constructor(address payable _gelato) {
+        gelato = _gelato;
+    }
 
     function setInterval(uint256 _interval) external onlyProxyAdmin {
         interval = _interval;
     }
 
-    function helloWorld(uint256 _paymentAmount)
-        external
-        gelatofy(_paymentAmount, Gelatofied.ETH)
-    {
+    function helloWorld(uint256 _paymentAmount) external onlyGelato {
         require(canExec(), "helloWorld: not canExec");
+
         lastCallTime = block.timestamp; // solhint-disable-line
+
+        payable(gelato).sendValue(_paymentAmount);
+
         emit LogHelloWorld();
     }
 
