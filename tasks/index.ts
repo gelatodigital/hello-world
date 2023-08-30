@@ -2,8 +2,8 @@ import { task } from "hardhat/config";
 import { HelloWorld } from "../typechain";
 
 export const setInterval = task("setinterval", "Sets time interval in seconds")
-  .addParam("interval", "time interval in seconds")
-  .setAction(async ({ interval }, { deployments, ethers, network }) => {
+  .addPositionalParam("interval", "time interval in seconds")
+  .setAction(async ({ interval }, { deployments, ethers }) => {
     try {
       const helloWorld = (await ethers.getContractAt(
         "HelloWorld",
@@ -12,16 +12,13 @@ export const setInterval = task("setinterval", "Sets time interval in seconds")
         ).address
       )) as HelloWorld;
 
-      const txResponse = await helloWorld.setInterval(interval, {
-        gasPrice: ethers.utils.parseUnits("1", "gwei"),
-      });
+      const txResponse = await helloWorld.setInterval(interval);
+
       console.log("\n waiting for mining\n");
-      console.log(
-        `${
-          network.name === "mainnet" ? "" : network.name + "."
-        }etherscan.io/tx/${txResponse.hash}`
-      );
+      console.log(`txHash: ${txResponse.hash}`);
+
       await txResponse.wait();
+
       console.log("Mining Complete");
     } catch (error) {
       console.error(error, "\n");
@@ -32,7 +29,7 @@ export const setInterval = task("setinterval", "Sets time interval in seconds")
 export const getInterval = task(
   "getInterval",
   "Gets time interval in seconds"
-).setAction(async (taskParams, { deployments, ethers }) => {
+).setAction(async (_, { deployments, ethers }) => {
   try {
     const helloWorld = (await ethers.getContractAt(
       "HelloWorld",
@@ -41,8 +38,7 @@ export const getInterval = task(
       ).address
     )) as HelloWorld;
 
-    const txResponse = await helloWorld.interval();
-    console.log(txResponse.toNumber());
+    console.log(await helloWorld.interval());
   } catch (error) {
     console.error(error, "\n");
     process.exit(1);

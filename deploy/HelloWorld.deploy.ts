@@ -1,27 +1,20 @@
-import { deployments, getNamedAccounts } from "hardhat";
+import hre, { deployments, getNamedAccounts } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { getAddressBookByNetwork } from "../src/config";
 import { DeployFunction } from "hardhat-deploy/types";
 import { sleep } from "../src/utils";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isHardhat = hre.network.name === "hardhat";
+
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  if (hre.network.name !== "hardhat") {
+  if (!isHardhat) {
     console.log(
-      `Deploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
+      `\nDeploying HelloWorld to ${hre.network.name}. Hit ctrl + c to abort`
     );
-    await sleep(10000);
+    await sleep(2000);
   }
 
   const { deploy } = deployments;
-  const { deployer } = await getNamedAccounts();
-
-  const { gelato } = getAddressBookByNetwork(hre.network.name);
-
-  if (!hre.ethers.utils.isAddress(gelato)) {
-    console.error("No gelato in network config addressBook");
-    return;
-  }
+  const { deployer, gelato } = await getNamedAccounts();
 
   await deploy("HelloWorld", {
     from: deployer,
@@ -29,14 +22,14 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
       proxyContract: "EIP173ProxyWithReceive",
     },
     args: [gelato],
-    log: hre.network.name !== "hardhat" ? true : false,
+    log: !isHardhat,
   });
 };
 
 export default func;
 
-func.skip = async (hre: HardhatRuntimeEnvironment) => {
-  return hre.network.name !== "hardhat";
-};
+// func.skip = async () => {
+//   return !isHardhat;
+// };
 
 func.tags = ["HelloWorld"];

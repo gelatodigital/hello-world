@@ -1,24 +1,24 @@
+import hre, { ethers, deployments, getNamedAccounts } from "hardhat";
 import { expect } from "chai";
-import { Signer } from "@ethersproject/abstract-signer";
-import hre = require("hardhat");
+import { Signer } from "ethers";
 import { HelloWorld } from "../typechain";
-import { getAddressBookByNetwork } from "../src/config";
-
-const { gelato } = getAddressBookByNetwork(hre.network.name);
-const { ethers, deployments } = hre;
+import {
+  time as blockTime,
+  impersonateAccount,
+  setBalance,
+} from "@nomicfoundation/hardhat-network-helpers";
 
 const INTERVAL = 5 * 60 * 1000;
 
 describe("Test HelloWorld Smart Contract", function () {
-  this.timeout(0);
-
   let owner: Signer;
-  let user: Signer;
+
+  let gelato: string;
 
   let helloWorld: HelloWorld;
   let gelatoSigner: Signer;
 
-  const etherToPay = ethers.utils.parseEther("1");
+  const etherToPay = ethers.parseEther("1");
 
   beforeEach("tests", async function () {
     if (hre.network.name !== "hardhat") {
@@ -27,25 +27,27 @@ describe("Test HelloWorld Smart Contract", function () {
     }
 
     await deployments.fixture();
-    [owner, , user] = await hre.ethers.getSigners();
 
-    // Impersonating the account
-    gelatoSigner = ethers.provider.getSigner(gelato);
-    await hre.network.provider.request({
-      method: "hardhat_impersonateAccount",
-      params: [await gelatoSigner.getAddress()],
-    });
+    [owner] = await hre.ethers.getSigners();
 
-    // Instantiate HelloWorld and give it some ETH
-    helloWorld = (await ethers.getContract(
+    const { gelato: gelatoAddress } = await getNamedAccounts();
+    gelato = gelatoAddress;
+
+    // Impersonating the Gelato smart contract account
+    await impersonateAccount(gelato);
+    gelatoSigner = await ethers.provider.getSigner(gelato);
+
+    // Instantiate HelloWorld contract (upgradeable proxy)
+    helloWorld = (await ethers.getContractAt(
       "HelloWorld",
+      (
+        await deployments.get("HelloWorld")
+      ).address,
       gelatoSigner
     )) as HelloWorld;
 
-    await hre.network.provider.send("hardhat_setBalance", [
-      helloWorld.address,
-      "0x" + etherToPay.toString(),
-    ]);
+    // HelloWorld contract needs Ether in its balance to pay Gelato
+    await setBalance(await helloWorld.getAddress(), etherToPay);
   });
 
   it("#0: When canExec is false and you try to call it reverts", async () => {
@@ -70,36 +72,35 @@ describe("Test HelloWorld Smart Contract", function () {
     await helloWorld.connect(owner).setInterval(INTERVAL); // 5 minutes
 
     // Call helloWorld to initialize lastCallTime on contract
-    await expect(helloWorld.helloWorld(etherToPay)).to.emit(
-      helloWorld,
-      "LogHelloWorld"
-    );
+    await expect(
+      helloWorld.helloWorld(etherToPay),
+      "first helloWorld"
+    ).to.changeEtherBalances([helloWorld, gelato], [-etherToPay, etherToPay]);
 
-    const blockNumber = await ethers.provider.getBlockNumber();
-    const { timestamp } = await ethers.provider.getBlock(blockNumber);
+    expect(await helloWorld.canExec(), "is canExec false?").to.be.false;
 
-    expect(await helloWorld.canExec()).to.be.false;
+    // Using hardhat-network-helpers to manipulate local blockchain time
+    await blockTime.increase(INTERVAL);
 
-    await hre.network.provider.send("evm_setNextBlockTimestamp", [
-      timestamp + INTERVAL,
-    ]);
-    await hre.network.provider.send("evm_mine");
+    expect(await helloWorld.canExec(), "is canExec true?").to.be.true;
 
-    expect(await helloWorld.canExec()).to.be.true;
+    await expect(
+      helloWorld.helloWorld(etherToPay),
+      "second helloWorld: revert due to insufficientBalance"
+    ).to.be.revertedWith("Address: insufficient balance");
 
-    const balanceBefore = await ethers.provider.getBalance(gelato);
+    // We need to reset balance as the first helloWorld consumed it
+    await setBalance(await helloWorld.getAddress(), etherToPay);
 
-    await expect(helloWorld.helloWorld(etherToPay)).to.emit(
-      helloWorld,
-      "LogHelloWorld"
-    );
-
-    expect(await ethers.provider.getBalance(gelato)).to.be.gt(balanceBefore);
+    await expect(
+      helloWorld.helloWorld(etherToPay),
+      "second helloWorld: ether balances not changed"
+    ).to.changeEtherBalances([helloWorld, gelato], [-etherToPay, etherToPay]);
   });
 
   it("#2: It reverts when you try to call not via GELATO", async () => {
     await expect(
-      helloWorld.connect(user).helloWorld(etherToPay)
-    ).to.be.revertedWith("Gelatofied: Only gelato");
+      helloWorld.connect(owner).helloWorld(etherToPay)
+    ).to.be.revertedWith("HelloWorld::onlyGelato");
   });
 });
